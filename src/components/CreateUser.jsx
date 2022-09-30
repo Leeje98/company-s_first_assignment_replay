@@ -62,7 +62,7 @@ const CreateButton = styled.button`
   width: 70px;
   height: 40px;
 `
-
+                                    // 부모컴포넌트로부터 상속 받기
 export default function CreateUser({ productID, name, produce, registration, detail, manager, onChange, onCreate, onClose }) {
   return (
     <>

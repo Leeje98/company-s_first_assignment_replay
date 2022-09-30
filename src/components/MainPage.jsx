@@ -14,10 +14,11 @@ export default function MainPage() {
     manager: ''
   })
   const { productID, name, produce, registration, detail, manager } = inputs;        // inputs의 기본 값??**질문하기
+
   const onChange = e => {                               // 신규 모달창에 입력 이벤트가 있을때 폼안의 정보를 갱신하는 기능
     const { name, value } = e.target;                   // 이벤트가 일어나는 폼을 타겟으로 잡아 
     setInputs({                             
-      ...inputs,
+      ...inputs,                                        // 기존 inputs값 가져오기
       [ name ]: value                                   // name을 기준으로 잡고 그에 매칭되는 value값을 받아온다
     })
   }
@@ -72,7 +73,7 @@ export default function MainPage() {
       // 나중에 구현 할 배열에 항목 추가하는 로직
 
     const Date = /^(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])$/
-    const IdCk = /^(?=.*?[A-Z])(?=.*?[0-9]).{12,12}$/
+    const IdCk = /^(?=.*?[A-Z])(?=.*?[0-9])(^[a-z]).{12,12}$/
 
     if((inputs.productID) === '' || (inputs.name) === '' ) {
       alert('제품ID와 제품명은 필수 입력입니다')
@@ -128,6 +129,23 @@ export default function MainPage() {
     }
   }
 
+
+  const onUpdate = ( id, data ) => {  // 기준값 id, 어떻게 바꿀지 = data
+    setUsers(users.map(     // 1. 맵으로 전체를 돌리며 체크한다
+      users => {          // 2. users 값을 파라미터로 가져와서
+        if (users.id === id ) {   // 3. 만약 users가 가지고 있는 id값이 파라미터가 가지고 있는 id값이랑 일치한다
+          return {
+            id,              // id 는 id 그대로 쓰고(기준값)
+            ...data,         // 여기에  productID, name, produce, ...등 각 요소의 값을 넣어준다
+          }
+        }
+        return users;  // 조건이 트루가 아니라면(배열이 변한게 없다면) 그대로 리턴한다
+      }
+    ))
+  }
+
+
+
   return (
     <div className='wrap'>
 
@@ -152,6 +170,7 @@ export default function MainPage() {
         <UserList 
           users={users} 
           onRemove={onRemove}
+          onUpdate={onUpdate}
           // 전달 props명(자식컴포넌트에서 받아서 이용함) = {현재(부모)컴포넌트의 오브젝트 name}
           // 이벤트 종류 = {현재(부모)컴포넌트에서 선언한 함수명}
           //-- 자식 컴포넌트에게 속성 전달(상속)
