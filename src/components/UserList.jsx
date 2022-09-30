@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './Main.css'
 
-export default function UserList({ users, onRemove, onUpdate }) {           // ---{} 에 대해 질문하기** 객체(요소)를 통째로 가져오는 것인가??
+export default function UserList({ users, onRemove, onUpdate }) {   
                             // 부모컴포넌트에서 const 로 선언했던 객체 정보 받아오기(props)
 
   const [showModal, setShowModal] = useState(false);           // 모달창이 보이고 안보이는 상태관리
@@ -18,7 +18,7 @@ export default function UserList({ users, onRemove, onUpdate }) {           // -
     manager: ''
   })
 
-  // const { name, produce, registration, detail, manager } = editingInputs;      // 필요없는걸까?**
+  const { name, produce, registration, detail, manager } = editingInputs;      // set으로만 이용되고 초기값은 사용되는 곳이 없어서 불이 꺼짐 
 
 
   // 여기서 className은 Modal이 항상 activeObject를 표시하기 때문에 "inactive"(비활성)일 수 없습니다.
@@ -147,18 +147,25 @@ export default function UserList({ users, onRemove, onUpdate }) {           // -
          { editingMode ? '적용' : '수정' }              {/* // onAccept:수정 버튼 클릭 이벤트 */}
         </button>
 
+        { editingMode ? null :
         <button className='Button' onClick={() => {
           console.log('삭제 요청');
           onRemove(id)
           setShowModal(false)
           console.log('모달 닫힘') // 부모 컴포넌트에서 관리 방법 질문하기** 삭제요청 취소시 안 닫힐 수 있도록
-        }}>삭제</button> 
+        }}>삭제</button> }
 
+        { editingMode ? 
+        <button className='Button' style={{ right:0 }} 
+        onClick={() => {setEditingMode(false)}}
+        >취소</button>
+         : 
         <button className='Button' style={{ right:0 }} 
           onClick={() => {
             setShowModal(false); 
-            console.log(`ID:${id} 모달 닫힘`)
-        }}>확인</button>
+            setEditingMode(false);
+            console.log(`ID:${id} 모달 닫힘`);
+        }}>확인</button> }
         </div>
       </div>
     </div>

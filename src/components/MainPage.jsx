@@ -15,7 +15,7 @@ export default function MainPage() {
   })
   const { productID, name, produce, registration, detail, manager } = inputs;        // inputs의 기본 값??**질문하기
 
-  const onChange = e => {                               // 신규 모달창에 입력 이벤트가 있을때 폼안의 정보를 갱신하는 기능
+  const onChange = (e) => {                               // 신규 모달창에 입력 이벤트가 있을때 폼안의 정보를 갱신하는 기능
     const { name, value } = e.target;                   // 이벤트가 일어나는 폼을 타겟으로 잡아 
     setInputs({                             
       ...inputs,                                        // 기존 inputs값 가져오기
@@ -73,12 +73,21 @@ export default function MainPage() {
       // 나중에 구현 할 배열에 항목 추가하는 로직
 
     const Date = /^(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])$/
-    const IdCk = /^(?=.*?[A-Z])(?=.*?[0-9])(^[a-z]).{12,12}$/
+    const IdCk =/^(?=.*[A-Z])(?=.*\d)[A-Z\d]{12,12}$/;
+
+    const duplicateCK = users.some( ({productID}) => {
+      // return users.productID === {productID}
+
+      return productID === inputs.productID
+    })
 
     if((inputs.productID) === '' || (inputs.name) === '' ) {
       alert('제품ID와 제품명은 필수 입력입니다')
     } else if( !IdCk.test(inputs.productID)){
       alert('제품ID를 올바르게 입력해주세요 \n(숫자, 영어 대문자 조합 12자리)')
+    } else if (duplicateCK === true) {
+      console.log(duplicateCK)
+      alert('이미 존재하는 제품ID입니다')
     } else if( !Date.test(inputs.produce) && (inputs.produce !== '') ) {
       alert('날짜를 형식에 맞게 입력해주세요')
     } else if( !Date.test(inputs.registration) && (inputs.registration !== '') ) {
@@ -93,20 +102,23 @@ export default function MainPage() {
         detail,
         manager         
       }   
+
+
+
+
+
       setUsers([...users, user])       // 1. ...스프레드 연산자 사용 // [기존배열, 새로추가할 자식컴포넌트에서 들고온 배열요소]
       // setUsers(users.concat(user))  // 2. concat(추가명령어) 사용   // [기존배열, concat(새로추가할 자식컴포넌트에서 들고온 배열요소)]
                                        // 리스트 렌더링
 
-      // setInputs({                      
-      //   productID: '',
-      //   name: '',
-      //   produce: '',
-      //   registration: '',
-      //   detail: '',
-      //   manager: ''
-      // })                               // 위에서 정보저장 했으니 모달창 폼 리셋 시키기?? 
-                                          // 일체형 아니고 모달형식으로, 열때마다 빈칸으로 시작하기때문에 필요없는 것으로 추정
-                                          // 그럼 리셋은 어디서 되는거지??**
+      setInputs({                      
+        productID: '',
+        name: '',
+        produce: '',
+        registration: '',
+        detail: '',
+        manager: ''
+      })                               // 위에서 정보저장 했으니 모달창 폼 리셋 시키기
 
       nextId.current += 1;             // 다음 요소 생성시 사용될 아이디 +1 해놓기
       setNewModal(false)               
