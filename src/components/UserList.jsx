@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './Main.css'
 
-export default function UserList({users}) {           // ---{} 에 대해 질문하기** 객체를 아예 가져오는 것인가??
+export default function UserList({users, onRemove}) {           // ---{} 에 대해 질문하기** 객체를 아예 가져오는 것인가??
                             // 부모컴포넌트에서 const 로 선언했던 객체 정보 받아오기(props)
 
   const [showModal, setShowModal] = useState(false);           // 모달창이 보이고 안보이는 상태관리
@@ -50,11 +50,17 @@ export default function UserList({users}) {           // ---{} 에 대해 질문
         </ul>
         <button className='Button editingBtn'>수정</button>
 
-        <button className='Button'>삭제</button> 
+        <button className='Button' onClick={() => {
+          console.log('삭제 요청');
+          onRemove(id)
+          setShowModal(false)
+          console.log('모달 닫힘') // 부모 컴포넌트에서 관리 방법 질문하기** 삭제요청 취소시 안 닫힐 수 있도록
+        }}>삭제</button> 
 
         <button className='Button' style={{ right:0 }} 
           onClick={() => {
             setShowModal(false); 
+            console.log(`ID:${id} 모달 닫힘`)
         }}>확인</button>
         </div>
       </div>
@@ -71,11 +77,10 @@ export default function UserList({users}) {           // ---{} 에 대해 질문
           <li 
             key={id}
             onClick={() => {
-              console.log('모달 오픈')
-              setActiveObject({ id, productID, name, produce, registration, detail, manager, 
-                // onRemove, onChange, onUpdate 
+              console.log(`ID:${id} 모달 열림`)
+              setActiveObject({ id, productID, name, produce, registration, detail, manager, onRemove, // onChange, onUpdate 
               });
-                              // 모달창에 들어갈 리스트 내용 요소 : 원래값 null 이다가 오픈할때 내용 속성값들 받아옴
+                              // 모달창에 들어갈 리스트에 포함된 내용&이벤트 요소 : 원래값 null 이다가 오픈할때 내용 속성값들 받아옴
               setShowModal(true);                                
             }}
           >

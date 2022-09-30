@@ -112,6 +112,22 @@ export default function MainPage() {
     }
   }
 
+  
+  const onRemove = (id) => {
+    // 현재 삭제 버튼을 클릭한 리스트의 아이디값을 받아옴
+
+    if(window.confirm('해당 내용을 삭제 하시겠습니까?')) {
+    setUsers(users.filter(user => user.id !== id))
+    // user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
+    // = user.id 가 id 인 것을 제거함
+
+    console.log(`ID:${id} 삭제완료`) 
+    alert('삭제되었습니다')
+    } else {
+      console.log('삭제 요청 취소') 
+    }
+  }
+
   return (
     <div className='wrap'>
 
@@ -135,6 +151,7 @@ export default function MainPage() {
       <div className='product_user'>
         <UserList 
           users={users} 
+          onRemove={onRemove}
           // 전달 props명(자식컴포넌트에서 받아서 이용함) = {현재(부모)컴포넌트의 오브젝트 name}
           // 이벤트 종류 = {현재(부모)컴포넌트에서 선언한 함수명}
           //-- 자식 컴포넌트에게 속성 전달(상속)
